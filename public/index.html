@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" content="width=device-width, initial-scale=1" http-equiv="Content-Type" name="viewport">
+<!-- JQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+<!-- Bootstrap tooltips -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js" type="text/javascript"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+        type="text/javascript"></script>
+<!-- MDB core JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="javascripts/Navigation-bar.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+<script src="javascripts/Chatbox.js" type="text/javascript"></script>
+<script src="javascripts/webspeech.js" type="text/javascript"></script>
+<script src="javascripts/Table-search.js" type="text/javascript"></script>
+<script src="javascripts/Toggle-Display.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"
+        type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+<script src="javascripts/TaskView.js" type="text/javascript"></script>
+<script src="javascripts/Calendar.js" type="text/javascript"></script>
+<script src="javascripts/TabReport.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<head>
+    <title>VUI Task/ Deadline Management System</title>
+    <link href="./stylesheets/style.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+    <!--  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">-->
+</head>
+<nav>
+    <div class="underline"></div>
+    <div class="underline"></div>
+    <div class="underline"></div>
+    <a onclick="ul(0); toggle_Home();">Home</a>
+    <a onclick="ul(1); toggle_deadline();">Deadlines</a>
+    <a onclick="ul(2); toggle_task()">Tasks</a>
+    <a onclick="ul(3); toggle_report()">Report Writing</a>
+    <a onclick="ul(4); toggle_help()">Help</a>
+    <a onclick="ul(5); toggle_stress()">Stress Management</a>
+</nav>
+<div class="icon">
+    <div class="speak" id="speaking">
+        <button class="button-microphone" type="button">
+            <span id="speak">Tap to speak</span>
+            <img alt="image of a microphone" id="speak-img" src="images/voice-search.svg"/>
+            <div class="col-sm-2 col-xs-4 text-center">
+                <div class="pulse-loader"></div>
+            </div>
+        </button>
+    </div>
+
+    <div class="read" id="reading">
+        <button class="button-microphone" data-content="Click Here for a surprise! :)" data-toggle="popover"
+                title="Hint: " type="button">
+            <span id="read">Tap for reader</span>
+            <img alt="image of a speaker" id="read-img" src="images/advertising.svg"/>
+        </button>
+    </div>
+</div>
+<p class="line-1 anim-typewriter" id="textTitle">Task/ Deadline Management System for Computer Science Students.</p>
+<body>
+<div class="Container" id="container">
+    <div id="Home">
+        <div class="calendar" id="calendar">
+            <div class="calendar-btn month-btn" onclick="$('#months').toggle('fast')">
+                <span id="curMonth"></span>
+                <div class="months dropdown" id="months"></div>
+            </div>
+
+            <div class="calendar-btn year-btn" onclick="$('#years').toggle('fast')">
+                <span id="curYear"></span>
+                <div class="years dropdown" id="years"></div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="calendar-dates">
+                <div class="days">
+                    <div class="day label">SUN</div>
+                    <div class="day label">MON</div>
+                    <div class="day label">TUE</div>
+                    <div class="day label">WED</div>
+                    <div class="day label">THUR</div>
+                    <div class="day label">FRI</div>
+                    <div class="day label">SAT</div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div class="days" id="calendarDays">
+                </div>
+            </div>
+            <!-- [EVENT] -->
+            <div id="cal-event">
+            </div>
+        </div>
+    </div>
+    <div id="Deadlines">
+        <div class="form-group">
+            <input class="search form-control" id="search" name="SearchTable" placeholder="Searching"
+                   style="width: 80%;" type="text">
+            <button class="btn btn-outline-dark" onclick="getInputValue();" type="submit" value="Submit">Enter</button>
+        </div>
+
+        <table class="table table-hover table-bordered results" id="Table">
+            <thead>
+            <tr>
+                <th style="width: 14%">Deadline ID</th>
+                <th style="width: 10%">Coursework Module ID</th>
+                <th style="width: 20%">Coursework Module Name</th>
+                <th style="width: 15%">Coursework Title</th>
+                <th style="width: 15%">Date Details</th>
+                <th style="width: 20%">Coursework Criteria</th>
+                <th id="edit">Edit/ Delete</th>
+            </tr>
+            <tr class="warning no-result" id="no-result">
+                <td colspan="7"><i class="fa fa-warning"></i> No result</td>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+        <div class="container-fluid" id="FormEdit">
+            <form>
+                <button aria-label="Close" class="close" id="CloseForm" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="form-row">
+                    <div class="col-3">
+                        <input class="form-control" id="deadlineId" placeholder="deadlineID" type="text" value="">
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" id="ModuleId" placeholder="Module ID" type="text" value="">
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control" id="ModuleName" placeholder="Module Name" type="text" value="">
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" id="CWName" placeholder="Coursework Name" type="text" value="">
+                    </div>
+                    <div class="col-4">
+                        <label>Birthday:</label>
+                        <input id="Edit-Date" name="edit-date" style="width: 100%" type="date">
+                    </div>
+                    <div class="col-5">
+                        <label>Coursework Criteria(in your own words)</label>
+                        <textarea class="form-control" id="Edit-criteria" name="Criteria-form" rows="3"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="Tasks">
+        <div class="TaskContainer">
+            <p>
+                <label class="middle" for="new-task">Add Task</label>
+                <input class="Chat" id="new-task" type="text"/>
+                <button class="btn btn-outline-dark" id="TaskButton" onclick='Task();' type="submit"
+                        value="Submit">Add Task
+                </button>
+            </p>
+
+            <h3 class="middle">Todo</h3>
+            <ul id="incomplete-tasks">
+            </ul>
+
+            <h3 class="middle">Completed Tasks</h3>
+            <ul id="completed-tasks">
+            </ul>
+        </div>
+    </div>
+    <div id="Report-writing">
+        <div id="reportWriting" class="naccs">
+            <div id="grid" class="grid">
+                <div class="gc gc--1-of-3">
+                    <div id="menu" class="menu">
+                        <div class="active" id="Novel-menu"><span class="light"></span><span>Novel Interaction Technologies</span>
+                        </div>
+                        <div id="UX-menu"><span class="light"></span><span>User Experience (UX) Design</span></div>
+                        <div id="BI-menu"><span class="light"></span><span>Business Intelligence</span></div>
+                        <div id="UIP-menu"><span class="light"></span><span>Undergraduate Individual Project</span>
+                        </div>
+                        <div id="AI-menu"><span class="light"></span><span>Artificial Intelligence</span></div>
+                    </div>
+                </div>
+                <div id="gc" class="gc gc--2-of-3">
+                    <ul class="nacc">
+                        <li class="active">
+                            <div id="card" class="card shadow1">
+                                <h2>Novel Report Templates</h2>
+                                <div class="Test shadow1">
+                                    <a href="#.pdf" id="Novel-1">Novel Report 1 Template</a>
+                                    <span> Novel Report 1 Template</span>
+                                    <a class="linkLine" href="#" id="Novel-link-1">
+                                        <span>Link here</span>
+                                        <svg viewBox="0 0 13 20">
+                                            <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="Test shadow1">
+                                    <a href="#.pdf" id="Novel-2">Novel Report 2 Template</a>
+                                    <span> Novel Report 2 Template</span>
+                                    <a class="linkLine" href="#" id="Novel-link-2">
+                                        <span>Link here</span>
+                                        <svg viewBox="0 0 13 20">
+                                            <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="Test shadow1">
+                                    <a href="#.mp4" id="Novel-3">Novel Report Explanation Link</a>
+                                    <span> Novel Report Explanation Link</span>
+                                    <a class="linkLine" href="#" id="Novel-link-3">
+                                        <span>Link here</span>
+                                        <svg viewBox="0 0 13 20">
+                                            <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="card shadow1">
+                                    <h2>User Experience (UX) Design</h2>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="ux-1">UI/UX Report 1 Template</a>
+                                        <span> UI/UX Report 1 Template</span>
+                                        <a class="linkLine" href="#" id="ux-link-1">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="ux-2">UI/UX Report 2 Template</a>
+                                        <span>UI/UX Report Template</span>
+                                        <a class="linkLine" href="#" id="ux-link-2">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.mp4" id="ux-3">UI/UX Phases Explanation Link</a>
+                                        <span>UI/UX Phases Explanation Link</span>
+                                        <a class="linkLine" href="#" id="ux-link-3">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="card shadow1">
+                                    <h2>Business Intelligence</h2>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="BI-1">Business Intelligence Report 1 Template</a>
+                                        <span>Business Intelligence Report 1 Template</span>
+                                        <a class="linkLine" href="#" id="BI-link-1">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="BI-2">Business Intelligence Report 2 Template</a>
+                                        <span>Business Intelligence Report Template</span>
+                                        <a class="linkLine" href="#" id="BI-link-2">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.mp4" id="BI-3">Business Intelligence Dataset Explanation Link</a>
+                                        <span>Business Intelligence Dataset Explanation Link</span>
+                                        <a class="linkLine" href="#" id="BI-link-3">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="card shadow1">
+                                    <h2>Undergraduate Individual Project</h2>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="UIP-1">UIP Report 1 Template</a>
+                                        <span>Undergraduate Individual Project Report 1 Template</span>
+                                        <a class="linkLine" href="#" id="UIP-link-1">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="UIP-2">UIP Report 2 Template</a>
+                                        <span>Undergraduate Individual Project Report Template</span>
+                                        <a class="linkLine" href="#" id="UIP-link-2">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.mp4" id="UIP-3">UIP Explanation Link</a>
+                                        <span>Undergraduate Individual Project Explanation Link</span>
+                                        <a class="linkLine" href="#" id="UIP-link-3">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="card shadow1">
+                                    <h2>Artificial Intelligence</h2>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="AI-1">AI Report 1 Template</a>
+                                        <span>Artificial Intelligence Report 1 Template</span>
+                                        <a class="linkLine" href="#" id="AI-link-1">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.pdf" id="AI-2">AI Report 2 Template</a>
+                                        <span>Artificial Intelligence Report Template</span>
+                                        <a class="linkLine" href="#" id="AI-link-2">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="Test shadow1">
+                                        <a href="#.mp4" id="AI-3">AI Explanation Link</a>
+                                        <span>Artificial Intelligence Explanation Link</span>
+                                        <a class="linkLine" href="#" id="AI-link-3">
+                                            <span>Link here</span>
+                                            <svg viewBox="0 0 13 20">
+                                                <polyline points="0.5 19.5 3 19.5 12.5 10 3 0.5"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="report-pdf">
+            <div id="Novel">
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="Novel-report-1"
+                        name="right_side"
+                        src="https://www.acsu.buffalo.edu/~zhengxio/Papers/Zhengxiong_Mobisys19b.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="Novel-report-2"
+                        name="right_side"
+                        src="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.63.6938&rep=rep1&type=pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe allow="accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture" allowfullscreen class="iframe"
+                        frameBorder="0"
+                        height="400" id="Novel-report-3"
+                        name="right_side"
+                        src="https://www.youtube.com/embed/Qqi0AeM-T1w"
+                        style="display: none" title="YouTube video player" width="560">
+                </iframe>
+            </div>
+
+            <div id="ux">
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="ux-report-1"
+                        name="right_side"
+                        src="https://course.ccs.neu.edu/cs5500sp17/09-UX.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="ux-report-2"
+                        name="right_side"
+                        src="https://www.dignitasdigital.com/wp-content/uploads/2015/05/UI-and-UX-design.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe allow="accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture" allowfullscreen class="iframe"
+                        frameBorder="0"
+                        height="400" id="ux-report-3"
+                        name="right_side"
+                        src="https://www.youtube.com/embed/GH1WR1IT_c0"
+                        style="display: none" title="YouTube video player" width="560">
+                </iframe>
+            </div>
+
+            <div id="BI">
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="BI-report-1"
+                        name="right_side"
+                        src="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.94.9692&rep=rep1&type=pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="BI-report-2"
+                        name="right_side"
+                        src="https://arxiv.org/ftp/arxiv/papers/2004/2004.08961.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe allow="accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture" allowfullscreen class="iframe"
+                        frameBorder="0"
+                        height="400" id="BI-report-3"
+                        name="right_side"
+                        src="https://www.youtube.com/embed/aTe7WXEch0M"
+                        style="display: none" title="YouTube video player" width="560">
+                </iframe>
+            </div>
+            <div id="UIP">
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="UIP-report-1"
+                        name="right_side"
+                        src="http://www.uob.edu.pk/computerScience/UoBStyle.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="UIP-report-2"
+                        name="right_side"
+                        src="http://dl.icdst.org/pdfs/files/08793976a383d760df7d6b109ee4fca8.pdf?__cf_chl_captcha_tk__=e031438e4899a578379a95f6141b0ee669c43188-1617221135-0-Ae4ebNX8p3qK42tsHPeTdS5ydNfL3l8P2k-hWcPPBdoCUdD3fi8Da4RGc6LM57GPRrL_ukQ-GiTQrKzDXEZT3KcBJcEtmXU7smhXRS7ooo9asADFgpduIzbsCARRRtus2tEKoTYbL4WJPbq0W8wNg-D8aAlL8a510TN6BTNtOSoSUsYolWKOQMQ7Z7j4L4Z8Od1WICJfcpth31AdMAIKkeh7EagqvLPZLmUSwf61vr_N1XUhTrwRINWjUJD6n9mXqPawQaHJdX2BF4J9JGFlDcrx2vYtLaStJQvXRJE4eh8JJX_HCGGaclUFGuku1CK1MJXpzxGE1vPh91Nd_ggmJta3GJNXgsSH7u_7RYx3tBwK_AEpA5dRVsJKdR0g6FyJ1zGX02UciiHPbOqnfwKF2IqbFAEdPX8E5d92BMbvrIU9abhUeTuxmwQhofiFupcozVYfoxVilSYjwPc8We5MT9hwGvlz7tv2QoP348pGpJqWHSBgmp9v_COXtOaYGXwYYPZcOBXjUFBAE9J-vUkAimDvoi1bPWoKHz0ccm6z-FFrXkkCZHqVmpVUpozO-OpjNgTwRBOinQhZtZFtRo1O3IHcimocrDBivnwYMGxNsyGNDTODyOVmTbdHWhBD96-alTxkiO1rGu0HwMdxECaQyeZ9KdxrJrN4u3T_sRLJcjT3Do302yjfKLd9iaPdNSp7xkD_G1WetTA7F2UFkczZf3M"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe allow="accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture" allowfullscreen class="iframe"
+                        frameBorder="0"
+                        height="400" id="UIP-report-3"
+                        name="right_side"
+                        src="https://www.youtube.com/embed/YZLCwNjh16w"
+                        style="display: none" title="YouTube video player" width="560">
+                </iframe>
+            </div>
+
+            <div id="AI">
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="AI-report-1"
+                        name="right_side"
+                        src="https://ai100.stanford.edu/sites/g/files/sbiybj9861/f/ai_100_report_0901fnlc_single.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe class="iframe" frameBorder="0" height="100%"
+                        id="AI-report-2"
+                        name="right_side"
+                        src="https://www2.datainnovation.org/2016-promise-of-ai.pdf"
+                        style="display: none"
+                        width="600px">
+                </iframe>
+                <iframe allow="accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture" allowfullscreen class="iframe"
+                        frameBorder="0"
+                        height="400" id="AI-report-3"
+                        name="right_side"
+                        src="https://www.youtube.com/embed/YhSeTEumjVA"
+                        style="display: none" title="YouTube video player" width="560">
+                </iframe>
+            </div>
+        </div>
+    </div>
+    <div id="Stress">
+        <div class="grid-row reverse video-gallery">
+            <input checked="checked" id="video-1" name="video-list" type="radio" value="1"/><label for="video-1">Option
+            1</label>
+            <input id="video-2" name="video-list" type="radio" value="2"/><label for="video-2">Option 2</label>
+            <input id="video-3" name="video-list" type="radio" value="3"/><label for="video-3">Option 3</label>
+            <input id="video-4" name="video-list" type="radio" value="4"/><label for="video-4">Option 4</label>
+            <input id="video-5" name="video-list" type="radio" value="5"/><label for="video-5">Option 5</label>
+            <input id="video-6" name="video-list" type="radio" value="6"/><label for="video-6">Option 6</label>
+            <!-- videos -->
+            <div class="video video-1">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/DKxCvAc-DvU"
+                        width="560"></iframe>
+            </div>
+
+            <div class="video video-2">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/aYy-yKk1j14"
+                        width="560"></iframe>
+            </div>
+
+            <div class="video video-3">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/rk3-Av1KblM"
+                        width="560"></iframe>
+            </div>
+
+            <div class="video video-4">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/fa-0MizbELk"
+                        width="560"></iframe>
+            </div>
+
+            <div class="video video-5">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/W5IJcsp0QHI"
+                        width="560"></iframe>
+            </div>
+
+            <div class="video video-6">
+                <iframe allowfullscreen class="video-frame" frameborder="0" height="400"
+                        src="https://www.youtube.com/embed/Jhm4BjQIjUw"
+                        width="560"></iframe>
+            </div>
+            <!-- videos -->
+        </div>
+    </div>
+    <div id="Help">
+        <div class="HelpContainer">
+            <h2>Help and commands</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button aria-expanded="false" id="accordion-button-1"><span
+                            class="accordion-title">First Time visiting the website</span><span
+                            aria-hidden="true" class="icon"></span></button>
+                    <div class="accordion-content">
+                        <ol>
+                            <h3>Home Page</h3>
+                            <li>
+                                The Home page has the calendar for tasks to be added to the calendar( whilst in use
+                                by
+                                the
+                                user = Don't close the browser page).
+                            </li>
+                            <li>
+                                The Home page is for date visualisation for students in an innovative way.
+                            </li>
+                        </ol>
+                        <ol>
+                            <h3>Deadlines Page</h3>
+                            <li>
+                                The page has all the deadlines in the table with function to edit, delete and add to
+                                the
+                                deadlines' table.
+                            </li>
+                            <li>
+                                Search function makes searching for deadline easier.
+                            </li>
+                        </ol>
+                        <ol>
+                            <h3>Tasks Page</h3>
+                            <li>
+                                Adding Tasks to the list of todo tasks.
+                            </li>
+                            <li>
+                                Can add tasks to list by asking the system!
+                            </li>
+                        </ol>
+                        <ol>
+                            <h3>Report Writing Page</h3>
+                            <li>
+                                Report templates for report submissions to help students in report writing
+                            </li>
+                            <li>
+                                Recorded lectures/ videos for report templates/ help from lecturers
+                            </li>
+                        </ol>
+                        <ol>
+                            <h3>Help Page</h3>
+                            <li>
+                                Help with commands and pages
+                            </li>
+                            <li>
+                                Helps visitors to know how to use the page
+                            </li>
+                        </ol>
+                        <ol>
+                            <h3>Stress Page</h3>
+                            <li> Just a stress-free page with a list of funny videos.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button aria-expanded="false" id="accordion-button-2"><span
+                            class="accordion-title">Deadlines Commands</span><span
+                            aria-hidden="true" class="icon"></span></button>
+                    <div class="accordion-content">
+                        <ol>
+                            <li>
+                                Deadlines
+                            </li>
+                            <li>
+                                Coursework Deadlines
+                            </li>
+                            <li>
+                                Deadlines for courseworks
+                            </li>
+                            <li>
+                                Any phrase containing the word deadline
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button aria-expanded="false" id="accordion-button-3"><span
+                            class="accordion-title">Tasks Commands</span><span
+                            aria-hidden="true" class="icon"></span>
+                    </button>
+                    <div class="accordion-content">
+                        <ol>
+                            <li>
+                                To do List
+                            </li>
+                            <li>
+                                Show task list
+                            </li>
+                            <li>
+                                Show my Task List
+                            </li>
+                            <li>
+                                Any phrase containing the word task or list
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button aria-expanded="false" id="accordion-button-4"><span
+                            class="accordion-title">Help Commands</span><span
+                            aria-hidden="true" class="icon"></span>
+                    </button>
+                    <div class="accordion-content">
+                        <ol>
+                            <li>
+                                Help
+                            </li>
+                            <li>
+                                Help Commands
+                            </li>
+                            <li>
+                                Help please
+                            </li>
+                            <li>
+                                help me here
+                            </li>
+                            <li>
+                                Any phrase containing the word help
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button aria-expanded="false" id="accordion-button-5"><span
+                            class="accordion-title">Funny Commands</span><span
+                            aria-hidden="true" class="icon"></span></button>
+                    <div class="accordion-content">
+                        <ol>
+                            <li>
+                                Play a funny video
+                            </li>
+                            <li>
+                                Funny Videos please
+                            </li>
+                            <li>
+                                funny video
+                            </li>
+                            <li>
+                                Any phrase containing the funny or video
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div class="chat_page" id="chatPage">
+    <button class="chat_button" onclick="openChatBox()">
+        <i class="fas fa-comments" id="chatOpen"></i>
+    </button>
+
+
+    <div class="chat_box animated fadeInUp" id="chatbar">
+        <div class="chat_box_header">
+            MESSAGES
+        </div>
+        <div class="chat_box_body" id="chatBody">
+        </div>
+        <div class="chat_box_footer">
+            <input id="MsgInput" placeholder="Enter Message" type="text">
+            <button onclick="send()"><i class="fab fa-telegram-plane"></i></button>
+        </div>
+    </div>
+</div>
+<div class="notify notify--info notify--dismissible" id="notify" role="alert">
+    <strong class="Title" id="title"></strong>
+    <p id="notification-text"></p>
+</div>
+</html>
+<script>
+    $('.notify.notify--info.notify--dismissible').append('<button type="button" class="notify-close">&times;</button>');
+
+    $('.notify-close').on('click', function () {
+        $(this).closest('.notify').hide();
+    });
+
+    setTimeout(function () {
+        $("#notify").hide("200")
+
+    }, 3000);
+</script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover({
+            placement: 'top',
+            trigger: 'hover'
+        });
+    });
+</script>
+<script>
+    const items = document.querySelectorAll(".accordion button");
+
+    function toggleAccordion() {
+        const itemToggle = this.getAttribute('aria-expanded');
+
+        for (i = 0; i < items.length; i++) {
+            items[i].setAttribute('aria-expanded', 'false');
+        }
+
+        if (itemToggle === 'false') {
+            this.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    items.forEach(item => item.addEventListener('click', toggleAccordion));
+</script>
+<script>
+    /* For Novel*/
+    document.getElementById("Novel-link-1").onclick = function () {
+        $('#Novel').show();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#Novel-report-3').hide();
+        $('#Novel-report-2').hide();
+        let novelReport1 = document.getElementById("Novel-report-1");
+        novelReport1.style.display = "inline-block";
+    }
+    document.getElementById("Novel-link-2").onclick = function () {
+        $('#Novel').show();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#Novel-report-3').hide();
+        $('#Novel-report-1').hide();
+        let novelReport2 = document.getElementById("Novel-report-2");
+        novelReport2.style.display = "inline-block";
+    }
+    document.getElementById("Novel-link-3").onclick = function () {
+        $('#Novel').show();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#Novel-report-1').hide();
+        $('#Novel-report-2').hide();
+        let novelReport2 = document.getElementById("Novel-report-3");
+        novelReport2.style.display = "inline-block";
+    }
+    /*For UX/UI*/
+    document.getElementById("ux-link-1").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').show();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#ux-report-3').hide();
+        $('#ux-report-2').hide();
+        let novelReport1 = document.getElementById("ux-report-1");
+        novelReport1.style.display = "inline-block";
+    }
+    document.getElementById("ux-link-2").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').show();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#ux-report-3').hide();
+        $('#ux-report-1').hide();
+        let novelReport2 = document.getElementById("ux-report-2");
+        novelReport2.style.display = "inline-block";
+    }
+    document.getElementById("ux-link-3").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').show();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#ux-report-1').hide();
+        $('#ux-report-2').hide();
+        let novelReport2 = document.getElementById("ux-report-3");
+        novelReport2.style.display = "inline-block";
+    }
+
+    /* for Business*/
+    document.getElementById("BI-link-1").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').show();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#BI-report-3').hide();
+        $('#BI-report-2').hide();
+        let novelReport1 = document.getElementById("BI-report-1");
+        novelReport1.style.display = "inline-block";
+    }
+    document.getElementById("BI-link-2").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').show();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#BI-report-3').hide();
+        $('#BI-report-1').hide();
+        let novelReport2 = document.getElementById("BI-report-2");
+        novelReport2.style.display = "inline-block";
+    }
+    document.getElementById("BI-link-3").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').show();
+        $('#UIP').hide();
+        $('#AI').hide();
+        $('#BI-report-1').hide();
+        $('#BI-report-2').hide();
+        let novelReport2 = document.getElementById("BI-report-3");
+        novelReport2.style.display = "inline-block";
+    }
+
+    /* For Final Project*/
+    document.getElementById("UIP-link-1").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').show();
+        $('#AI').hide();
+        $('#UIP-report-3').hide();
+        $('#UIP-report-2').hide();
+        let novelReport1 = document.getElementById("UIP-report-1");
+        novelReport1.style.display = "inline-block";
+    }
+    document.getElementById("UIP-link-2").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').show();
+        $('#AI').hide();
+        $('#UIP-report-3').hide();
+        $('#UIP-report-1').hide();
+        let novelReport2 = document.getElementById("UIP-report-2");
+        novelReport2.style.display = "inline-block";
+    }
+    document.getElementById("UIP-link-3").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').show();
+        $('#AI').hide();
+        $('#UIP-report-1').hide();
+        $('#UIP-report-2').hide();
+        let novelReport2 = document.getElementById("UIP-report-3");
+        novelReport2.style.display = "inline-block";
+    }
+    /*For Artifical Intelligence*/
+    document.getElementById("AI-link-1").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').show();
+        $('#AI-report-3').hide();
+        $('#AI-report-2').hide();
+        let novelReport1 = document.getElementById("AI-report-1");
+        novelReport1.style.display = "inline-block";
+    }
+    document.getElementById("AI-link-2").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').show();
+        $('#AI-report-3').hide();
+        $('#AI-report-1').hide();
+        let novelReport2 = document.getElementById("AI-report-2");
+        novelReport2.style.display = "inline-block";
+    }
+    document.getElementById("AI-link-3").onclick = function () {
+        $('#Novel').hide();
+        $('#ux').hide();
+        $('#BI').hide();
+        $('#UIP').hide();
+        $('#AI').show();
+        $('#AI-report-1').hide();
+        $('#AI-report-2').hide();
+        let novelReport2 = document.getElementById("AI-report-3");
+        novelReport2.style.display = "inline-block";
+    }
+</script>
